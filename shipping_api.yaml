@@ -1,0 +1,275 @@
+openapi: 3.0.3
+info:
+  title: Package Management API
+  version: 1.0.0
+  description: API for managing packages, including creating, retrieving, updating, and deleting package information.
+  contact:
+    name: API Support
+    email: support@example.com
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+servers:
+  - url: http://localhost:8080/api/v1
+    description: Local development server
+  - url: https://api.example.com/api/v1
+    description: Production server
+
+paths:
+  /packages:
+    get:
+      summary: Get all packages
+      description: Retrieves a list of all packages.
+      operationId: getAllPackages
+      tags:
+        - Packages
+      responses:
+        '200':
+          description: A list of packages
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Package'
+        '500':
+          description: Internal Server Error
+          content:
+              application/json:
+                  schema:
+                      $ref: '#/components/schemas/Error'
+    post:
+      summary: Create a new package
+      description: Creates a new package with the provided details.
+      operationId: createPackage
+      tags:
+        - Packages
+      requestBody:
+        description: Package object to be created
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePackage'
+      responses:
+        '201':
+          description: Package created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Package'
+        '400':
+          description: Bad Request - Invalid input
+          content:
+              application/json:
+                  schema:
+                      $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+              application/json:
+                  schema:
+                      $ref: '#/components/schemas/Error'
+
+  /packages/{packageId}:
+    get:
+      summary: Get a package by ID
+      description: Retrieves a package by its unique ID.
+      operationId: getPackageById
+      tags:
+        - Packages
+      parameters:
+        - name: packageId
+          in: path
+          description: ID of the package to retrieve
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Package found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Package'
+        '404':
+          description: Package not found
+          content:
+              application/json:
+                  schema:
+                      $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+              application/json:
+                  schema:
+                      $ref: '#/components/schemas/Error'
+    put:
+      summary: Update a package by ID
+      description: Updates an existing package identified by its ID.
+      operationId: updatePackageById
+      tags:
+        - Packages
+      parameters:
+        - name: packageId
+          in: path
+          description: ID of the package to update
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Package object to be updated
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatePackage'
+      responses:
+        '200':
+          description: Package updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Package'
+        '400':
+          description: Bad Request - Invalid input
+          content:
+              application/json:
+                  schema:
+                      $ref: '#/components/schemas/Error'
+        '404':
+          description: Package not found
+          content:
+              application/json:
+                  schema:
+                      $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+              application/json:
+                  schema:
+                      $ref: '#/components/schemas/Error'
+    delete:
+      summary: Delete a package by ID
+      description: Deletes a package identified by its ID.
+      operationId: deletePackageById
+      tags:
+        - Packages
+      parameters:
+        - name: packageId
+          in: path
+          description: ID of the package to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Package deleted successfully
+        '404':
+          description: Package not found
+          content:
+              application/json:
+                  schema:
+                      $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+              application/json:
+                  schema:
+                      $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    Package:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Unique identifier for the package
+          readOnly: true
+        height:
+          type: number
+          format: float
+          description: Height of the package (in cm)
+        width:
+          type: number
+          format: float
+          description: Width of the package (in cm)
+        depth:
+          type: number
+          format: float
+          description: Depth of the package (in cm)
+        weight:
+          type: number
+          format: float
+          description: Weight of the package (in kg)
+        special_handling_instructions:
+          type: string
+          description: Special instructions for handling the package
+      required:
+        - height
+        - width
+        - depth
+        - weight
+    CreatePackage:
+      type: object
+      properties:
+        height:
+          type: number
+          format: float
+          description: Height of the package (in cm)
+        width:
+          type: number
+          format: float
+          description: Width of the package (in cm)
+        depth:
+          type: number
+          format: float
+          description: Depth of the package (in cm)
+        weight:
+          type: number
+          format: float
+          description: Weight of the package (in kg)
+        special_handling_instructions:
+          type: string
+          description: Special instructions for handling the package
+      required:
+        - height
+        - width
+        - depth
+        - weight
+    UpdatePackage:
+      type: object
+      properties:
+        height:
+          type: number
+          format: float
+          description: Height of the package (in cm)
+        width:
+          type: number
+          format: float
+          description: Width of the package (in cm)
+        depth:
+          type: number
+          format: float
+          description: Depth of the package (in cm)
+        weight:
+          type: number
+          format: float
+          description: Weight of the package (in kg)
+        special_handling_instructions:
+          type: string
+          description: Special instructions for handling the package
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+          description: The error code
+        message:
+          type: string
+          description: A human-readable error message
