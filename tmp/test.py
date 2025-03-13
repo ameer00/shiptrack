@@ -18,8 +18,10 @@ class TestEndpoints(unittest.TestCase):
         self.assertEqual(data['team'], 'genAIs')
         self.assertEqual(data['organization'], 'acme')
 
+
+
     def test_liveness(self):
-        response = self.app.get('/liveness')
+        response = self.app.get('/live')
         data = json.loads(response.data)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(data['status'], 'live')
