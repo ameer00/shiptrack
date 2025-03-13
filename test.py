@@ -1,6 +1,8 @@
 from main import app
 import json, time
 
+import unittest
+
 class TestEndpoints(unittest.TestCase):
 
     def setUp(self):
@@ -33,5 +35,5 @@ class TestEndpoints(unittest.TestCase):
         self.assertTrue(isinstance(data['timestamp'], float))  # Check if timestamp is a float
 
 
-if __name__ == '__mian__':
-    unittest.mian()
+if __name__ == '__main__':
+    unittest.main()
