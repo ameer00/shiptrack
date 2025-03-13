@@ -1,30 +1,44 @@
 import json, time, requests
 from flask import Flask, jsonify, request, abort
-from data_model import Package
-from connect_connector import SessionMaker
-
 
 app = Flask(__name__)
 
 @app.route('/discovery', methods=['GET'])
 def discovery():
+    """
+    Provides information about the Shiptrack service.
+
+    Returns:
+        JSON: A JSON object containing the service's name, version, owners, team, and organization.
+    """
     return jsonify({
-        "name": "shipping",
+        "name": "shiptrack",
         "version": "1.0",
         "owners": ["ameerabb", "lonestar"],
         "team": "genAIs",
         "organization": "acme"
     })
 
-# liveness and readiness routes
-@app.route('/live', methods=['GET'])
+@app.route('/liveness', methods=['GET'])
 def liveness():
+    """
+    Checks the liveness status of the Shiptrack    service.
+
+    Returns:
+        JSON: A JSON object indicating the service's status, code, and timestamp.
+    """
     return jsonify({"status": "live", "code": 200, "timestamp": time.time()})
 
-@app.route('/ready', methods=['GET'])
+@app.route('/readiness', methods=['GET'])
 def readiness():
+    """
+    Checks the readiness status of the Shiptrack service.
+
+    Returns:
+        JSON: A JSON object indicating the service's status, code, and timestamp.
+    """
     return jsonify({"status": "ready", "code": 200, "timestamp": time.time()})
 
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+    app.run(debug=True, port=8000)
