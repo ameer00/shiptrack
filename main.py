@@ -1,30 +1,24 @@
-import json, time, requests
+import json
+import time
+import requests
 from flask import Flask, jsonify, request, abort
-from data_model import Package
-from connect_connector import SessionMaker
-
+from backend_handlers import discovery
 
 app = Flask(__name__)
 
+# create the discovery, liveness and readiness endpoints
 @app.route('/discovery', methods=['GET'])
-def discovery():
-    return jsonify({
-        "name": "shipping",
-        "version": "1.0",
-        "owners": ["ameerabb", "lonestar"],
-        "team": "genAIs",
-        "organization": "acme"
-    })
+def discovery_route():
+    return discovery()
 
-# liveness and readiness routes
 @app.route('/live', methods=['GET'])
-def liveness():
+def liveness_route():
     return jsonify({"status": "live", "code": 200, "timestamp": time.time()})
 
 @app.route('/ready', methods=['GET'])
-def readiness():
+def readiness_route():
     return jsonify({"status": "ready", "code": 200, "timestamp": time.time()})
 
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+    app.run(debug=True, host='0.0.0.0', port=8000)
