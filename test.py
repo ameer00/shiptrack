@@ -13,7 +13,7 @@ class TestEndpoints(unittest.TestCase):
         self.assertEqual(data[name], 'shipping')
         self.assertEqual(data[version], '1.0')
         self.assertEqual(data[owners], ['ameerabb', 'lonestar'])
-        self.assertEqual(data[team], 'genAIs')
+        self.assertEqual(data['team'], 'genAIs')
         self.assertEqual(data['organization'], 'acme')
 
     def test_liveness(self):
