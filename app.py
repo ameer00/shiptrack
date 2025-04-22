@@ -1,13 +1,13 @@
-# Import necessary libraries
-import json, time, os
+import json, time
 from flask import Flask, jsonify, abort
+import os
 
-# Create a Flask application instance
+# --- Flask App Initialization ---
 app = Flask(__name__)
 
 @app.route('/discovery', methods=['GET'])
 def discovery():
-    return jsonify ({        "name": "shipping",
+    return jsonify({        "name": "shipping",
         "version": "1.0",
         "owners": ["ameerabb", "lonestar"],
         "team": "genAIs",
@@ -15,14 +15,14 @@ def discovery():
     })
 
 # create liveness and readiness endpoints
-@app.route('/live', methods=['GET'])
+@app.route('/liveness', methods=['GET'])
 def liveness():
     return jsonify({"status": "live", "code": 200, "timestamp": time.time()})
 
-@app.route('/ready', methods=['GET'])
+@app.route('/readiness', methods=['GET'])
 def readiness():
     return jsonify({"status": "ready", "code": 200, "timestamp": time.time()})
 
 
 if __name__ == '__main__':
-    app.run(debug=True) # Run the Flask development server
+    app.run(debug=True, port=5000) # Run the Flask development server
